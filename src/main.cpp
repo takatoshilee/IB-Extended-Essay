@@ -37,7 +37,7 @@ Graph generateRandomGraph(int numNodes, double density) {
 }
 
 void runAndPrintMSTAlgorithms(const Graph& graph) {
-    // Kruskal's algorithm
+    // KRUSKAL
     MSTResult kruskalResult = kruskalMST(graph);
     std::cout << "Kruskal's MST:\n";
     for (const Edge& edge : kruskalResult.kruskalMST) {
@@ -45,7 +45,7 @@ void runAndPrintMSTAlgorithms(const Graph& graph) {
     }
     std::cout << "Time taken for Kruskal's algorithm: " << kruskalResult.kruskalTime << " seconds\n";
 
-    // Prim's algorithm
+    // PRIM
     MSTResult primResult = primMST(graph);
     std::cout << "Prim's MST:\n";
     for (const Edge& edge : primResult.primMST) {
@@ -56,10 +56,10 @@ void runAndPrintMSTAlgorithms(const Graph& graph) {
 
 
 MSTResult runMSTAlgorithms(const Graph& graph) {
-    // Kruskal's algorithm
+    // KRUSKAL
     MSTResult kruskalResult = kruskalMST(graph);
 
-    // Prim's algorithm
+    // PRIM
     MSTResult primResult = primMST(graph);
 
     // Store the individual results
@@ -67,51 +67,34 @@ MSTResult runMSTAlgorithms(const Graph& graph) {
 }
 
 
-
-
 int main() {
     int numGraphs = 10; // Number of graphs for each factor
     int initialSize = 100; // Initial graph size
     double sizeIncrement = 100.0; // Size increment between graphs
     double initialDensity = 0.2; // Initial graph density
-    double densityIncrement = 10; // Density increment between graphs
+    double densityIncrement = 0.1; // Density increment between graphs
 
-    // Create a CSV file for graph size timing results
-    std::ofstream sizeOutputFile("size_timing_results.csv");
-    sizeOutputFile << "Nodes,Kruskal,Prim\n"; // Write header
+    // Create a CSV file for combined size and density timing results
+    std::ofstream combinedOutputFile("combined_timing_results.csv");
+    combinedOutputFile << "Nodes,Density,Kruskal,Prim\n"; // Write header
 
-    // Generate graphs based on size
+    // Generate graphs based on size and density
     for (int i = 0; i < numGraphs; ++i) {
         int numNodes = initialSize + static_cast<int>(i * sizeIncrement);
 
-        Graph graph = generateRandomGraph(numNodes, initialDensity);
+        for (int j = 0; j < numGraphs; ++j) {
+            double density = initialDensity + j * densityIncrement;
 
-        MSTResult results = runMSTAlgorithms(graph);
+            Graph graph = generateRandomGraph(numNodes, density);
 
-        // Write the timing results to the CSV file
-        sizeOutputFile << numNodes << "," << results.kruskalTime << "," << results.primTime << "\n";
+            MSTResult results = runMSTAlgorithms(graph);
+
+            // Write the timing results to the CSV file
+            combinedOutputFile << numNodes << "," << density << "," << results.kruskalTime << "," << results.primTime << "\n";
+        }
     }
 
-    sizeOutputFile.close(); // Close the CSV file
-
-    // Create a CSV file for density timing results
-    std::ofstream densityOutputFile("density_timing_results.csv");
-    densityOutputFile << "Density,Kruskal,Prim\n"; // Write header
-
-    // Generate graphs based on density
-    for (int i = 0; i < numGraphs; ++i) {
-        int numNodes = initialSize + static_cast<int>(i * sizeIncrement);
-        double density = initialDensity + i * densityIncrement;
-
-        Graph graph = generateRandomGraph(numNodes, density);
-
-        MSTResult results = runMSTAlgorithms(graph);
-
-        // Write the timing results to the CSV file
-        densityOutputFile << density << "," << results.kruskalTime << "," << results.primTime << "\n";
-    }
-
-    densityOutputFile.close(); // Close the CSV file
+    combinedOutputFile.close(); // Close the CSV file
 
     // Run the Python script to generate plots
     system("python3 src/generate_graphs.py");

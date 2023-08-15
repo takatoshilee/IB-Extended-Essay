@@ -1,33 +1,28 @@
-import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-# Load data from CSV files
-size_data = pd.read_csv("size_timing_results.csv")
-density_data = pd.read_csv("density_timing_results.csv")
+# Correct the indentation of the function definition
+def measure_mst_time(graph):
+    kruskal_result = kruskalMST(graph)
+    prim_result = primMST(graph)
+    return kruskal_result.kruskalTime, prim_result.primTime
 
-# Plot for size-based graphs
-plt.figure(figsize=(10, 5))
-plt.subplot(1, 2, 1)
-plt.plot(size_data["Nodes"], size_data["Kruskal"], label="Kruskal")
-plt.plot(size_data["Nodes"], size_data["Prim"], label="Prim")
-plt.xlabel("Number of Nodes")
-plt.ylabel("Time (seconds)")
-plt.title("MST Algorithm Comparison (Size-Based)")
-plt.legend()
+data = pd.read_csv("combined_timing_results.csv")
 
-# Plot for density-based graphs
-plt.subplot(1, 2, 2)
-plt.plot(density_data["Density"], density_data["Kruskal"], label="Kruskal")
-plt.plot(density_data["Density"], density_data["Prim"], label="Prim")
-plt.xlabel("Density")
-plt.ylabel("Time (seconds)")
-plt.title("MST Algorithm Comparison (Density-Based)")
-plt.legend()
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlabel('Number of Nodes')
+ax.set_ylabel('Density')
+ax.set_zlabel('Time (seconds)')
 
-plt.tight_layout()
+x = data['Nodes']
+y = data['Density']
+z_kruskal = data['Kruskal']
+z_prim = data['Prim']
 
-# Save the plots
-plt.savefig("mst_comparison_plots.png")
+ax.scatter(x, y, z_kruskal, c='r', marker='o', label='Kruskal')
+ax.scatter(x, y, z_prim, c='b', marker='^', label='Prim')
 
-# Show the plots
+ax.legend()
 plt.show()
