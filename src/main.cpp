@@ -4,7 +4,7 @@
 #include <climits>
 #include <algorithm>
 #include <unordered_set>
-#include <chrono>   // Add this include for timing measurements
+#include <chrono>   
 #include <sstream>
 #include <random>
 #include <string>
@@ -14,7 +14,6 @@
 #include "../include/mst_algorithms.h"
 
 
-// Function to generate a random graph with given number of nodes and density
 Graph generateRandomGraph(int numNodes, double density) {
     Graph graph(numNodes);
 
@@ -68,17 +67,15 @@ MSTResult runMSTAlgorithms(const Graph& graph) {
 
 
 int main() {
-    int numGraphs = 10; // Number of graphs for each factor
-    int initialSize = 100; // Initial graph size
-    double sizeIncrement = 100.0; // Size increment between graphs
-    double initialDensity = 0.2; // Initial graph density
-    double densityIncrement = 0.1; // Density increment between graphs
+    int numGraphs = 10;
+    int initialSize = 100; 
+    double sizeIncrement = 100.0; 
+    double initialDensity = 0.1; 
+    double densityIncrement = 0.1; 
 
-    // Create a CSV file for combined size and density timing results
     std::ofstream combinedOutputFile("combined_timing_results.csv");
     combinedOutputFile << "Nodes,Density,Kruskal,Prim\n"; // Write header
 
-    // Generate graphs based on size and density
     for (int i = 0; i < numGraphs; ++i) {
         int numNodes = initialSize + static_cast<int>(i * sizeIncrement);
 
@@ -89,14 +86,12 @@ int main() {
 
             MSTResult results = runMSTAlgorithms(graph);
 
-            // Write the timing results to the CSV file
             combinedOutputFile << numNodes << "," << density << "," << results.kruskalTime << "," << results.primTime << "\n";
         }
     }
 
-    combinedOutputFile.close(); // Close the CSV file
+    combinedOutputFile.close(); 
 
-    // Run the Python script to generate plots
     system("python3 src/generate_graphs.py");
 
     return 0;
