@@ -27,7 +27,7 @@ Graph generateRandomGraph(int numNodes, double density) {
             if (random < density) {
                 int weight = weightDist(gen);
                 graph.addEdge(i, j, weight);
-                graph.addEdge(j, i, weight); // Graph is undirected
+                graph.addEdge(j, i, weight); 
             }
         }
     }
@@ -74,7 +74,7 @@ int main() {
     double densityIncrement = 0.1; 
 
     std::ofstream combinedOutputFile("combined_timing_results.csv");
-    combinedOutputFile << "Nodes,Density,Kruskal,Prim\n"; // Write header
+    combinedOutputFile << "Nodes,Density,Kruskal,Prim\n";
 
     for (int i = 0; i < numGraphs; ++i) {
         int numNodes = initialSize + static_cast<int>(i * sizeIncrement);
