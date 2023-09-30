@@ -19,6 +19,7 @@ To set up the Python environment, follow these steps:
 
 ```bash
 python3 -m venv venv
+source venv/bin/activate
 ```
 2. Install the required Python packages:
 ```bash
@@ -38,6 +39,8 @@ This will execute the MST algorithms on the provided datasets and generate a CSV
 
 ## Results
 The project generates 3D scatter plots and heatmaps comparing the time complexities of Kruskal's and Prim's algorithms for different graph sizes and densities. The results are visualized using the matplotlib library in Python.
+
+![Kruskal vs Prim's running time based on randomised graph size and densities](graph.png)
 
 ## Dependencies
 C++ Code: None (standard libraries only)
